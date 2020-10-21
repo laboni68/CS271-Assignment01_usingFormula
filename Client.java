@@ -92,8 +92,7 @@ class ClockSyncThread implements Runnable
         try {
             while(true)
             {
-                int sleepTime = (int)(Client.delta/ (2*Client.rho));
-                Thread.sleep(Client.interrupt*sleepTime);
+
                 Client.function.calculateCurrentSimulatedTime();
                 Clock sentTime = new Clock(Client.current_sim_time);
                 Client.myWriter.write("Message sent to Time Server\n");
@@ -126,6 +125,8 @@ class ClockSyncThread implements Runnable
                 Client.function.printClockTime(Client.sim_time_at_Sync);
                 System.out.println("Actual :"+ Client.formatter.format(Client.date));
                 System.out.println("===================================="+"\n");
+                int sleepTime = (int)(Client.delta/ (2*Client.rho));
+                Thread.sleep(Client.interrupt*sleepTime);
                 //System.out.println(Client.current_sim_time.hour+":"+Client.current_sim_time.minute+":"+Client.current_sim_time.second);
                 //Clock newTime=Client.function.addWaitingTime(sleepTime);
                 //System.out.println(newTime.hour+":"+newTime.minute+":"+newTime.second);
@@ -211,6 +212,7 @@ class BlockChainThread implements Runnable
                 int amount = s.nextInt();
                 Client.function.calculateCurrentSimulatedTime();
                 Clock currentTime = new Clock(Client.current_sim_time);
+                System.out.println("TimeStamp: "+currentTime.hour+":"+currentTime.minute+":"+currentTime.second);
                 //int timeStamp = 0; // update the timeStamp using TimerServer
                 int totalBalance = Client.function.calculateTotalBalance(clientId);
                 if(amount<0 || amount>totalBalance || sender!= clientId)
@@ -456,12 +458,12 @@ class Function{
         int diff = (int)((Client.current_sys_time-Client.sys_time_at_sync)*(1+Client.rho));
         //System.out.println("current "+Client.current_sys_time+" system "+Client.sys_time_at_sync+" diff "+diff);
         Client.current_sim_time.second = Client.sim_time_at_Sync.second+diff;
-        if(Client.current_sim_time.second>60)
+        if(Client.current_sim_time.second>=60)
         {
             long save= Client.current_sim_time.second;
             Client.current_sim_time.second=(save%60);
             Client.current_sim_time.minute=Client.sim_time_at_Sync.minute+(save/60);
-            if(Client.current_sim_time.minute>60)
+            if(Client.current_sim_time.minute>=60)
             {
                 save=Client.current_sim_time.minute;
                 Client.current_sim_time.minute=(save%60);
