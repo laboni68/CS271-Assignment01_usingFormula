@@ -215,7 +215,7 @@ class BlockChainThread implements Runnable
                 System.out.println("TimeStamp: "+currentTime.hour+":"+currentTime.minute+":"+currentTime.second);
                 //int timeStamp = 0; // update the timeStamp using TimerServer
                 int totalBalance = Client.function.calculateTotalBalance(clientId);
-                if(amount<0 || amount>totalBalance || sender!= clientId)
+                if(amount<=0 || amount>totalBalance || sender!= clientId)
                 {
                     System.out.println("INCORRECT");
                 }
@@ -386,7 +386,7 @@ class Function{
                 check++;
                 //continue;
             }
-            else if(n.timeStamp.hour<time.hour||(n.timeStamp.hour==time.hour&&(n.timeStamp.minute<time.minute))||(n.timeStamp.hour==time.hour&&n.timeStamp.minute==time.minute&&n.timeStamp.second<time.second))
+            else if(n.timeStamp.hour<time.hour||(n.timeStamp.hour==time.hour&&(n.timeStamp.minute<time.minute))||(n.timeStamp.hour==time.hour&&n.timeStamp.minute==time.minute&&n.timeStamp.second<=time.second))
                 Client.blockChain.add(n);
 
         }
